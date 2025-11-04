@@ -11,7 +11,6 @@
 - Unitaires : parsing binaire, sérialisation, primitives triangulation.
 - Intégration : endpoints PointSetManager (/pointset POST, /pointset/{id} GET) et Triangulator (/triangulation/{id} GET).
 - Performance : parsing et triangulation sur jeux synthétiques.
-- Robustesse : erreurs réseau, données corrompues, concurrence.
 
 ## Organisation (arborescence proposée)
 - TP/
@@ -26,12 +25,8 @@
       - conftest.py
     - perf/
       - test_triangulation_perf.py
-  - reports/
-    - perf/
-    - coverage/
-  - docs/
 
-## Cas de test Exemple (détaillés)
+## Cas de test Exemple 
 
 ### 1) Parsing / Sérialisation (unit)
 - parse_pointset_valid
@@ -101,11 +96,3 @@ GET /triangulation/{id}
   - N = [1k, 5k, 10k] selon capacité, définir seuils indicatifs
 - concurrency
   - plusieurs requêtes simultanées (10-50) pour valider stabilité
-
-## Roadmap courte (priorités)
-1. Écrire tests unitaires parsing (failing tests).
-2. Implémenter parsing minimal pour les faire passer.
-3. Écrire tests unit triangulation (cas basiques).
-4. Implémenter algorithme basique (faire passer).
-5. Ajouter tests d'API (mocks) et endpoint minimal.
-6. Intégrer tests perf.
