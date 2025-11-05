@@ -2,7 +2,6 @@ import math
 import struct
 from triangulator.PointSet import PointSet as ps
 
-
 def test_parse_pointset_valid():
     point_count = struct.pack("<L", 2)
     point1 = struct.pack("<ff", 1.0, 2.0) 
@@ -15,6 +14,21 @@ def test_parse_pointset_valid():
 
     assert len(result) == len(expected)
     for (x_exp, y_exp), (x_res, y_res) in zip(expected, result):
+        assert math.isclose(x_exp, x_res)
+        assert math.isclose(y_exp, y_res)
+
+def test_parse_large_pointset():
+    point_count = 1000
+    points = [(float(i), float(i) * 2.0) for i in range(point_count)]
+    
+    byte_data = struct.pack("<L", point_count)
+    for x, y in points:
+        byte_data += struct.pack("<ff", x, y)
+
+    result = ps.parse_pointset(byte_data)
+
+    assert len(result) == point_count
+    for (x_exp, y_exp), (x_res, y_res) in zip(points, result):
         assert math.isclose(x_exp, x_res)
         assert math.isclose(y_exp, y_res)
 
