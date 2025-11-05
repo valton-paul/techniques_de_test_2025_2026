@@ -14,6 +14,8 @@
 
 ## Organisation (arborescence proposée)
 - TP/
+  - src/
+    - triangulator
   - tests/
     - unit/
       - test_binary_format.py
