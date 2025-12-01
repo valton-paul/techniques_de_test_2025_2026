@@ -14,6 +14,8 @@
 
 ## Organisation (arborescence proposée)
 - TP/
+  - src/
+    - triangulator
   - tests/
     - unit/
       - test_binary_format.py
@@ -30,27 +32,21 @@
 
 ### 1) Parsing / Sérialisation (unit)
 - parse_pointset_valid
-  - Entrée : bytes conforme (N + N*(x,y) float32 little-endian)
+  - Entrée : bytes conforme
   - Attendu : liste de tuples (x, y) avec tolérance flottante
 - parse_pointset_too_short
   - Entrée : header N déclaré > données fournies
   - Attendu : ValueError ou custom ParsingError
 - parse_empty_pointset
   - Entrée : N == 0
-  - Attendu : [] (ou comportement documenté)
+  - Attendu : []
 - serialize_pointset_roundtrip
   - Entrée : liste points
-  - Attendu : serialize -> parse == original (within eps)
-- parse_triangles_valid
-  - Entrée : bytes pour Vertices + Triangles (indices)
-  - Attendu : vertices list, triangles list of index triples
-- invalid_triangle_indices
-  - Entrée : triangle contenant index >= N
-  - Attendu : ValidationError
+  - Attendu : serialize -> parse == original
 
 ### 2) Algorithme de triangulation (unit)
 - minimal_triangle
-  - 3 non-colinear points -> 1 triangle, indices distincts
+  - 3 non-colinéaires points -> 1 triangle, indices distincts
 - square_case
   - 4 points carré -> 2 triangles (indices valides)
 - collinear_points
