@@ -5,7 +5,7 @@ class Triangles:
     points: PointSet
     triangles: list[tuple[int, int, int]]
 
-    def __init__(self, points: list[tuple[float, float]], triangles: list[tuple[int, int, int]]):
+    def __init__(self, points: PointSet, triangles: list[tuple[int, int, int]]):
         self.points = [] if points is None else points
         self.triangles = [] if triangles is None else triangles
     
