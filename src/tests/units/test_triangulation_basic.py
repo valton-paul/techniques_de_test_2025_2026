@@ -1,5 +1,6 @@
 import struct
-from triangulator.Triangles import Triangles as tr
+from triangulator.usecases.Triangles import Triangles as tr
+from triangulator.usecases.PointSet import PointSet
 
 def test_minimal_triangle(): 
     point_count = struct.pack("<L", 3)
@@ -16,7 +17,7 @@ def test_minimal_triangle():
 
     result = tr.parse_triangles(triangle_bytes)
 
-    assert result.points == expected_points
+    assert result.points.points == expected_points
     assert result.triangles == expected_triangles
 
 def test_square_case(): 
@@ -37,7 +38,7 @@ def test_square_case():
 
     result = tr.parse_triangles(triangle_bytes)
 
-    assert result.points == expected_points
+    assert result.points.points == expected_points
     assert result.triangles == expected_triangles
 
 def test_invalid_triangle_data(): 
@@ -67,7 +68,7 @@ def test_serialize_minimal_triangle():
                       struct.pack("<L", 1) +
                       struct.pack("<LLL", 0, 1, 2))
 
-    result_bytes = tr.serialize_triangles(tr(points, triangles))
+    result_bytes = tr.serialize_triangles(tr(PointSet(points), triangles))
 
     assert result_bytes == expected_bytes
 
@@ -83,7 +84,7 @@ def test_serialize_square_case():
                       struct.pack("<LLL", 0, 1, 2) +
                       struct.pack("<LLL", 0, 2, 3))
 
-    result_bytes = tr.serialize_triangles(tr(points, triangles))
+    result_bytes = tr.serialize_triangles(tr(PointSet(points), triangles))
 
     assert result_bytes == expected_bytes
 
@@ -93,7 +94,7 @@ def test_serialize_empty_triangles():
 
     expected_bytes = struct.pack("<L", 0) + struct.pack("<L", 0)
 
-    result_bytes = tr.serialize_triangles(tr(points, triangles))
+    result_bytes = tr.serialize_triangles(tr(PointSet(points), triangles))
 
     assert result_bytes == expected_bytes
 

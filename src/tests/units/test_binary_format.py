@@ -1,6 +1,6 @@
 import math
 import struct
-from triangulator.PointSet import PointSet as ps
+from triangulator.usecases.PointSet import PointSet as ps
 
 def test_parse_pointset_valid():
     point_count = struct.pack("<L", 2)
@@ -12,8 +12,8 @@ def test_parse_pointset_valid():
 
     result = ps.parse_pointset(valid_bytes)
 
-    assert len(result) == len(expected)
-    for (x_exp, y_exp), (x_res, y_res) in zip(expected, result):
+    assert len(result.points) == len(expected)
+    for (x_exp, y_exp), (x_res, y_res) in zip(expected, result.points):
         assert math.isclose(x_exp, x_res)
         assert math.isclose(y_exp, y_res)
 
@@ -27,8 +27,8 @@ def test_parse_large_pointset():
 
     result = ps.parse_pointset(byte_data)
 
-    assert len(result) == point_count
-    for (x_exp, y_exp), (x_res, y_res) in zip(points, result):
+    assert len(result.points) == point_count
+    for (x_exp, y_exp), (x_res, y_res) in zip(points, result.points):
         assert math.isclose(x_exp, x_res)
         assert math.isclose(y_exp, y_res)
 
@@ -61,7 +61,7 @@ def test_parse_empty_pointset():
     
     result = ps.parse_pointset(empty_bytes)
 
-    assert result == expected
+    assert result.points == expected
 
 def test_parse_too_long_pointset():
     point_count = struct.pack("<L", 1)
@@ -77,45 +77,48 @@ def test_parse_too_long_pointset():
 
 def test_serialize_pointset():
     points = [(1.0, 2.0), (-3.0, 4.5)]
+    pointset = ps(points)
 
     expected_bytes = struct.pack("<Lff", 2, 1.0, 2.0) + struct.pack("<ff", -3.0, 4.5)
-    
-    result_bytes = ps.serialize_pointset(points)
-    
+
+    result_bytes = ps.serialize_pointset(pointset)
+
     assert result_bytes == expected_bytes
 
 def test_serialize_empty_pointset():
     points = []
+    pointset = ps(points)
 
     expected_bytes = struct.pack("<L", 0)
- 
-    result_bytes = ps.serialize_pointset(points)
+
+    result_bytes = ps.serialize_pointset(pointset)
 
     assert result_bytes == expected_bytes
 
 def test_serialize_single_point_pointset():
     points = [(3.14, -2.71)]
+    pointset = ps(points)
 
     expected_bytes = struct.pack("<Lff", 1, 3.14, -2.71)
 
-    result_bytes = ps.serialize_pointset(points)
+    result_bytes = ps.serialize_pointset(pointset)
 
     assert result_bytes == expected_bytes
 
 def test_serialize_wrong_point_format():
-    points = [(1.0, 2.0, 3.0)]  
+    points = [(1.0, 2.0, 3.0)]
 
     try:
-        ps.serialize_pointset(points)
+        pointset = ps(points)
         assert False
     except ValueError:
         assert True
 
 def test_serialize_non_float_point():
-    points = [(1.0, "a")]  
+    points = [(1.0, "a")]
 
     try:
-        ps.serialize_pointset(points)
+        pointset = ps(points)
         assert False
     except TypeError:
         assert True
