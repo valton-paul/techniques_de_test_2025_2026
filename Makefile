@@ -12,7 +12,6 @@ perf_test:
 coverage:
 	@PYTHONPATH=$(PYTHONPATH) coverage run -m pytest
 	@PYTHONPATH=$(PYTHONPATH) coverage report
-	@PYTHONPATH=$(PYTHONPATH) coverage html
 
 lint:
 	@PYTHONPATH=$(PYTHONPATH) ruff check src/
